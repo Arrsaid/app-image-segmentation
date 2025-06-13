@@ -7,7 +7,7 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 # URL de l'API de prédiction sur Heroku
-API_BASE = "https://img-seg-api-f284f7d46372.herokuapp.com/" # "http://127.0.0.1:5000/"
+API_BASE = "https://img-seg-api-f284f7d46372.herokuapp.com/"
 
 # Dossier des images réelles
 IMAGES_FOLDER = "static/images"
