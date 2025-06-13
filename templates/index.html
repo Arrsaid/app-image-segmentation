@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Segmentation d'image - WebApp Pro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color:rgb(167, 149, 149);
+        }
+        h1 {
+            color: #333;
+        }
+        .form-section {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: rgb(141, 141, 141);
+            border-radius: 8px;
+        }
+        .image-container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .image-block {
+            text-align: center;
+            flex: 1;
+        }
+        .image-block img {
+            border: 2px solid #ccc;
+            padding: 5px;
+            max-width: 100%;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebApp de segmentation d'image</h1>
+
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" class="form-section">
+        <h2>Choisir une image du dataset</h2>
+        <label for="image_id">Sélectionnez une image :</label>
+        <select name="image_id" id="image_id">
+            {% for img in images %}
+                <option value="{{ img }}" {% if img == selected_id %}selected{% endif %}>{{ img }}</option>
+            {% endfor %}
+        </select>
+    
+        <h2>Ou charger une image personnalisée</h2>
+        <label for="custom_image">Sélectionnez un fichier (PNG ou JPEG) :</label>
+        <input type="file" name="custom_image" id="custom_image" accept="image/png,image/jpeg">
+    
+        <br><br>
+        <button type="submit" style="
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            text-align: center;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        ">Lancer la prédiction</button>
+    </form>
+
+    {% if processing %}
+        <p style="color: blue;">⏳ Prédiction en cours...</p>
+    {% endif %}
+
+    {% if selected_id or predicted_mask_url %}
+    <h2>Résultats :</h2>
+    <div class="image-container">
+        {% if real_image_url %}
+        <div class="image-block">
+            <h3>Image réelle</h3>
+            <img src="{{ real_image_url }}" alt="Image réelle">
+        </div>
+        {% endif %}
+
+        {% if real_mask_url %}
+        <div class="image-block">
+            <h3>Masque réel</h3>
+            <img src="{{ real_mask_url }}" alt="Masque réel">
+        </div>
+        {% endif %}
+
+        {% if predicted_mask_url %}
+        <div class="image-block">
+            <h3>Masque prédit</h3>
+            <img src="{{ predicted_mask_url }}" alt="Masque prédit">
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
